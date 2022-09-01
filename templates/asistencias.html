@@ -1,0 +1,69 @@
+{% extends './layout.html' %}
+
+{% block title %} Subir asistencias {% endblock %}
+
+{% block body %}
+{% if message %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>¡Espera!</strong> {{message}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+<div class="container mb-3">
+    <form action="" method="post" class="rounded border border-primary p-3">
+        <div class="row g-3">
+            <legend class="text-center mb-3">Registro de asistencia</legend>
+            <div class="col-md-8 mb-3">
+                <select class="form-select" id="id_proyecto" aria-label="Default select example" name="id_proyecto"
+                    aria-placeholder="Nombre de proyecto" required>
+                    <option value="Selecciona el proyecto" selected>Selecciona el proyecto</option>
+                    {% for proyecto in proyectos %}
+                    <option value="{{proyecto.id_proyecto}}"> {{ proyecto.nombre_proyecto }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4 mb-3">
+                <input type="submit" class="btn btn-danger container-fluid mb-3" value="Consultar" onclick="return validateFormAsistencias()"/>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% if empleados %}
+<div class="container">
+    <form action="" method="post">
+        <table class="table table-hover table-striped table-warning table-align-middle">
+            <thead class="table-danger">
+                <tr>
+                    <th scope="col">Nombre completo</th>
+                    <th scope="col">Horas extras</th>
+                    <th scope="col">Asistencia</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for empleado in empleados %}
+                <tr>
+                    <td hidden><input name="today" type="date" value="{{ today }}"></td>
+                    <td hidden><input name="proyecto" type="number" value="{{ empleado.proyecto.id_proyecto}}"></td>
+                    <td><input hidden name="empleado" type="number"
+                            value="{{ empleado.id_empleado}}">{{ empleado.nombre_empleado }}</td>
+                    <td><input type="number" name="horas_extras" value="0" required></td>
+                    <td>
+                        <select class="form-select" name="attendance" id="attendance">
+                            <option value="1" selected>Asistencia</option>
+                            <option value="0">Falta</option>
+                        </select>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" class="btn btn-primary mb-3" value="Registrar asistencias" />
+    </form>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{url_for('static',filename='js/app.js')}}"></script>
+{% endblock %}

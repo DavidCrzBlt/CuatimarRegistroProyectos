@@ -1,0 +1,89 @@
+{% extends './layout.html' %}
+
+{% block title %} Modificación de datos {% endblock %}
+
+{% block body %}
+
+
+<div class="container mt-3">
+
+    <form action="" method="post" class="rounded border border-primary p-3">
+        <div class="row g-3">
+            <legend class="text-center">Modificación de datos de empleado</legend>
+            <input class="form-control" type="number" name="id_empleado" id="id_empleado"
+                value="{{info_empleado.id_empleado}}" hidden>
+            <div class="form-floating col-md-6">
+                <input class="form-control" type="number" name="clave_banco" id="clave_banco"
+                    value="{{info_empleado.clave_banco}}" aria-label="Disabled input clave banco" disabled readonly>
+                <label for="clave_banco">Clave banco empleado</label>
+            </div>
+            <div class="form-floating col-md-6">
+                <input class="form-control" type="text" name="nombre_empleado" id="nombre_empleado"
+                    value="{{info_empleado.nombre_empleado}}" aria-label="Disabled input nombre empleado" disabled
+                    readonly>
+                <label for="nombre_empleado">Nombre completo</label>
+            </div>
+            <div class="form-floating col-md-6">
+                <input type="number" step=".01" class="form-control" id="salario_base" name="salario_base"
+                    value="{{info_empleado.salario_base}}" placeholder="Salario base" required />
+                <label for="salario_base">Salario base</label>
+            </div>
+            <div class="form-floating col-md-6">
+                <input type="number" step=".01" class="form-control" name="salario_base_IMSS" id="salario_base_IMSS"
+                    value="{{info_empleado.salario_base_IMSS}}" placeholder="Salario base IMSS" required />
+                <label for="salario_base_IMSS">Salario base IMSS</label>
+            </div>
+            <div class="form-floating col-md-6">
+                <input type="number" step=".01" class="form-control" name="valor_he" id="valor_he"
+                    value="{{info_empleado.costo_he}}" required />
+                <label for="valor_he">Valor hora extra</label>
+            </div>
+            <div class="col-md-6">
+                <label for="descuento_FONACOT">Descuento FONACOT</label>
+                <select class="form-select" name="descuento_FONACOT" id="descuento_FONACOT"
+                    aria-placeholder="Descuento FONACOT" required>
+                    {% if info_empleado.descuento_FONACOT == true %}
+                    <option value="true" selected>Sí</option>
+                    <option value="false">No</option>
+                    {% else %}
+                    <option value="true">Sí</option>
+                    <option value="false" selected>No</option>
+                    {% endif %}
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label for="descuento_INFONAVIT">Descuento INFONAVIT</label>
+                <select class="form-select" name="descuento_INFONAVIT" id="descuento_INFONAVIT"
+                    aria-placeholder="Descuento INFONAVIT" required>
+                    {% if info_empleado.descuento_INFONAVIT == true %}
+                    <option value="true" selected>Sí</option>
+                    <option value="false">No</option>
+                    {% else %}
+                    <option value="true">Sí</option>
+                    <option value="false" selected>No</option>
+                    {% endif %}
+                </select>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="proyecto">Proyectos</label>
+                <select class="form-select" name="proyecto" id="proyecto" aria-placeholder="Selecciona proyecto"
+                    required>
+                    {% for proyecto in proyectos %}
+                    {% if info_empleado.id_proyecto == proyecto.id_proyecto %}
+                    <option value="{{proyecto.id_proyecto}}" selected>{{proyecto.nombre_proyecto}}</option>
+                    {% else %}
+                    <option value="{{proyecto.id_proyecto}}">{{proyecto.nombre_proyecto}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <input type="submit" class="btn btn-danger col-md-4 offset-md-4 mb-4" value="Actualizar datos"
+                onclick="return validateForm()" />
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" src="{{url_for('static',filename='js/app.js')}}"></script>
+{% endblock %}

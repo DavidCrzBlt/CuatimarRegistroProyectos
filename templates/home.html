@@ -1,0 +1,242 @@
+{% extends './layout.html' %}
+
+{% block title %} Inicio {% endblock %}
+
+{% block body %}
+<h2>Bienvenido a la página de inicio</h2>
+<p>Aquí te explicaremos brevemente como usar la página</p>
+<div class="row g-4">
+    <div class="col">
+        <div class="card border-primary">
+            <div class="card-body">
+                <h5 class="card-title text-center">Registros</h5>
+                <p class="card-text">En esta sección, vas a registrar por primera vez los nuevos proyectos, nuevos empleados, asistencias diarias y pagos semanales. Es importante seguir los pasos de acuerdo a la numeración de abajo.</p>
+                <div class="accordion" id="accordionRegistros">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="registroProyecto">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseRegistroProyecto" aria-expanded="false" aria-controls="collapseRegistroProyecto">
+                                1.-Registro de proyectos
+                            </button>
+                        </h2>
+                        <div id="collapseRegistroProyecto" class="accordion-collapse collapse" aria-labelledby="registroProyecto"
+                            data-bs-parent="#accordionRegistros">
+                            <div class="accordion-body">
+                                Se tiene que dar de alta un proyecto con un nombre único, una ubicación, un cliente y definir si en el proyecto van a trabajar de lunes a domingo o de lunes a sábado. <br>
+                                <strong> Este es el primer paso para empezar a usar la plataforma y es pieza clave para poder dar de alta empleados, registrar asistencias y hacer pagos.</strong> 
+                            </div>
+                            <div class="text-center mb-3">
+                                <a href="{{url_for('proyectos')}}" class="btn btn-danger">Registrar nuevo proyecto</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="registroEmpleado">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseRegistroEmpleado" aria-expanded="false" aria-controls="collapseRegistroEmpleado">
+                                2.-Registro de empleados
+                            </button>
+                        </h2>
+                        <div id="collapseRegistroEmpleado" class="accordion-collapse collapse" aria-labelledby="registroEmpleado"
+                            data-bs-parent="#accordionRegistros">
+                            <div class="accordion-body">
+                                Se da de alta al empleado con una clave de banco única y un nombre único, además se registran sus percepciones salariales y se especifica si tiene crédito FONACOT o INFONAVIT. 
+                                Por último se le asigna el proyecto en el que va a estar trabajando
+                            </div>
+                            <div class="text-center mb-3">
+                                <a href="{{url_for('empleados')}}" class="btn btn-danger">Registrar nuevo empleado</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="registroAsistencias">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseRegistroAsistencias" aria-expanded="false" aria-controls="collapseRegistroAsistencias">
+                                3.-Registro de asistencias
+                            </button>
+                        </h2>
+                        <div id="collapseRegistroAsistencias" class="accordion-collapse collapse" aria-labelledby="registroAsistencias"
+                            data-bs-parent="#accordionRegistros">
+                            <div class="accordion-body">
+                                <strong>Es muy importante que las asistencias se registren diario</strong> Ya que el sistema solo te dejará registrar las asistencias de tus empleados el día que está transcurriendo. Es decir, que no podrás regresar a registrar las asistencias de un día anterior.
+                            </div>
+                            <div class="text-center mb-3">
+                                <a href="{{url_for('asistencias')}}" class="btn btn-danger">Registrar asistencias</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="registroPagos">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseRegistroPagos" aria-expanded="false" aria-controls="collapseRegistroPagos">
+                                4.-Registro de pagos
+                            </button>
+                        </h2>
+                        <div id="collapseRegistroPagos" class="accordion-collapse collapse" aria-labelledby="registroPagos"
+                            data-bs-parent="#accordionRegistros">
+                            <div class="accordion-body">
+                                Los pagos <strong>solo se pueden realizar los días jueves.</strong> Esto con la finalidad de que el usuario pueda evitar cometer un error y pagar dos veces en una misma semana a los trabajadores.
+                                <br>
+                                Para generar los pagos solo debes seleccionar el proyecto y automáticamente se van a cargar para cada empleado las asistencias de la semana y las horas extras trabajadas.
+                                <br>
+                                Solo debes llenar los descuentos FONACOT e INFONAVIT, si es que aplican y oprimir el botón de "Registrar pagos".
+                            </div>
+                            <div class="text-center mb-3">
+                                <a href="{{url_for('pagos')}}" class="btn btn-danger">Registrar pagos</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col">
+        <div class="card border-primary">
+            <div class="card-body">
+                <h5 class="card-title text-center">Consultas</h5>
+                <p class="card-text">Aquí podrás consultar proyectos, empleados, asistencias y pagos realizados. A continuación te explicaré como puedes obtener el mejor provecho de las consultas.</p>
+                <div class="accordion" id="accordionConsultas">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="consultaProyectos">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseConsultaProyectos" aria-expanded="false" aria-controls="collapseConsultaProyectos">
+                                Consulta de proyectos
+                            </button>
+                        </h2>
+                        <div id="collapseConsultaProyectos" class="accordion-collapse collapse" aria-labelledby="consultaProyectos"
+                            data-bs-parent="#accordionConsultas">
+                            <div class="accordion-body">
+                                Aquí puedes consultar todos los proyectos. Puedes ver la ubicación, el cliente, el estatus y el nombre de proyecto.
+                                <br>
+                                Si quieres también puedes descargar la tabla en Excel y modificarla a tu gusto.
+                            </div>
+                            <div class="text-center mb-3">
+                                <a href="{{url_for('consulta_proyectos')}}" class="btn btn-danger">Consulta proyectos</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="consultaEmpleados">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseConsultaEmpleados" aria-expanded="false" aria-controls="collapseConsultaEmpleados">
+                                Consulta empleados
+                            </button>
+                        </h2>
+                        <div id="collapseConsultaEmpleados" class="accordion-collapse collapse" aria-labelledby="consultaEmpleados"
+                            data-bs-parent="#accordionConsultas">
+                            <div class="accordion-body">
+                                Aquí puedes consultar el estatus de los empleados, los proyectos en los que trabajan y toda la información relacionada a percepciones salariales.
+                                <br>
+                                También puedes descargar la información en Excel y usar los datos como más te convenga.
+                            </div>
+                            <div class="text-center mb-3">
+                                <a href="{{url_for('consulta_empleados')}}" class="btn btn-danger">Consulta empleados</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="consultaAsistencias">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseConsultaAsistencias" aria-expanded="false" aria-controls="collapseConsultaAsistencias">
+                                Consulta asistencias
+                            </button>
+                        </h2>
+                        <div id="collapseConsultaAsistencias" class="accordion-collapse collapse" aria-labelledby="consultaAsistencias"
+                            data-bs-parent="#accordionConsultas">
+                            <div class="accordion-body">
+                                Puedes consultar las asistencias de un proyecto en específico, seleccionando el proyecto y la semana que quieras consultar.
+                                <br>
+                                También puedes descargar en una tabla de Excel las asistencias de la semana que elegiste.
+                            </div>
+                            <div class="text-center mb-3">
+                                <a href="{{url_for('consulta_asistencias')}}" class="btn btn-danger">Consulta asistencias</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="consultaPagos">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseConsultaPagos" aria-expanded="false" aria-controls="collapseConsultaPagos">
+                                Consulta pagos
+                            </button>
+                        </h2>
+                        <div id="collapseConsultaPagos" class="accordion-collapse collapse" aria-labelledby="consultaPagos"
+                            data-bs-parent="#accordionConsultas">
+                            <div class="accordion-body">
+                                Puedes consultar los pagos que se hicieron a determinado proyecto en determinada semana.
+                                <br>
+                                Simplemente debes elegir de la lista el proyecto y la semana que quieras consultar y oprimir el botón "Consultar".
+                                <br>
+                                También puedes descargar los datos que aparecen en una tabla de Excel para manipularlos a tu gusto.
+                            </div>
+                            <div class="text-center mb-3">
+                                <a href="{{url_for('consulta_pagos')}}" class="btn btn-danger">Consulta pagos</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col">
+        <div class="card border-primary">
+            <div class="card-body">
+                <h5 class="card-title text-center">Modificaciones</h5>
+                <p class="card-text">En esta sección podrás ver como hacer modificaciones de datos, bajas y reactivaciones de empleados, así como baja de proyectos</p>
+                <div class="accordion" id="accordionModificaciones">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="modificacionProyectos">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseModificacionProyectos" aria-expanded="false" aria-controls="collapseModificacionProyectos">
+                                1.-Modificación de proyectos
+                            </button>
+                        </h2>
+                        <div id="collapseModificacionProyectos" class="accordion-collapse collapse" aria-labelledby="modificacionProyectos"
+                            data-bs-parent="#accordionModificaciones">
+                            <div class="accordion-body">
+                                Puedes dar de baja proyectos si oprimes el botón con el icono del bote de basura.
+                                <br>
+                                Cuando das de baja un proyecto, todos los empleados asociados a él, cambian su estatus a inactivos y se desligan del proyecto.
+                                <br>
+                                Para volver a asignarles un proyecto nuevo debes de ir a la sección <a href="{{url_for('consulta_empleados')}}">"Consulta empleados"</a>
+                            </div>
+                            <div class="text-center mb-3">
+                                <a href="{{url_for('consulta_proyectos')}}" class="btn btn-danger">Consulta proyectos</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="modificacionEmpleados">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseModificacionEmpleados" aria-expanded="false" aria-controls="collapseModificacionEmpleados">
+                                2.-Modificación de empleados
+                            </button>
+                        </h2>
+                        <div id="collapseModificacionEmpleados" class="accordion-collapse collapse" aria-labelledby="modificacionEmpleados"
+                            data-bs-parent="#accordionModificaciones">
+                            <div class="accordion-body">
+                                Puedes editar los datos de un empleado si oprimes el botón con el icono del lápiz.
+                                <br>
+                                Puedes modificar todos los datos, excepto el nombre y la clave de banco ya que son únicos.
+                                <br>
+                                Además está opción sirve para volver a dar de alta a empleados que habían dejado de trabajar o que simplemente cambiaron de proyecto.
+                                <br>
+                                Cuando oprimes el botón con el icono de la basura, se da de baja el empleado y se desliga del proyecto al que estaba asociado.
+                            </div>
+                            <div class="text-center mb-3">
+                                <a href="{{url_for('consulta_empleados')}}" class="btn btn-danger">Consulta empleados</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+
+{% endblock %}

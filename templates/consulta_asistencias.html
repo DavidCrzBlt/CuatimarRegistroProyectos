@@ -1,0 +1,80 @@
+{% extends './layout.html' %}
+
+{% block title %} Consulta asistencias {% endblock %}
+
+{% block body %}
+<div class="container mb-3">
+    <form action="" method="post" class="rounded border border-primary p-3">
+        <div class="row g-3">
+            <legend class="text-center mb-1">Lista de asistencia</legend>
+            <div class="form-floating col-md-4">
+                <input type="number" class="form-control" id="semana" name="semana" value="{{ week_number }}"
+                    placeholder="Numero de semana" required />
+                <label for="semana">Número de semana a consultar</label>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select" aria-label="Default select example" name="id_proyecto" id="id_proyecto"
+                    aria-placeholder="Nombre de proyecto" required>
+                    <option value="Selecciona el proyecto" selected>Selecciona el proyecto</option>
+                    {% for proyecto in proyectos %}
+                    <option value="{{ proyecto.id_proyecto }}"> {{ proyecto.nombre_proyecto }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input type="submit" class="btn btn-primary container-fluid mb-3" value="Consultar" onclick="return validateFormAsistencias()" />
+            </div>
+        </div>
+    </form>
+</div>
+{% if empleados_dias %}
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-warning table-align-middle caption-top" id="table-consulta-asistencias">
+        <thead class="table-danger">
+            <tr>
+                <th scope="col"></th>
+                {% for w in week %}
+                <th colspan="2">{{ w }}</th>
+                {% endfor %}
+            </tr>
+            <tr class="table-group-divider">
+                <th scope="col">Nombre empleado</th>
+                <th class="titulos_verticales" scope="col">Asistencia</th>
+                <th class="titulos_verticales" scope="col">Horas extras</th>
+                <th class="titulos_verticales" scope="col">Asistencia</th>
+                <th class="titulos_verticales" scope="col">Horas extras</th>
+                <th class="titulos_verticales" scope="col">Asistencia</th>
+                <th class="titulos_verticales" scope="col">Horas extras</th>
+                <th class="titulos_verticales" scope="col">Asistencia</th>
+                <th class="titulos_verticales" scope="col">Horas extras</th>
+                <th class="titulos_verticales" scope="col">Asistencia</th>
+                <th class="titulos_verticales" scope="col">Horas extras</th>
+                <th class="titulos_verticales" scope="col">Asistencia</th>
+                <th class="titulos_verticales" scope="col">Horas extras</th>
+                <th class="titulos_verticales" scope="col">Asistencia</th>
+                <th class="titulos_verticales" scope="col">Horas extras</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for emp in empleados_dias %}
+            <tr>
+                <td>{{ emp[0].empleado.nombre_empleado}}</td>
+                {% for dias in emp %}
+                {% if not dias %}
+                <td>0</td>
+                <td>0</td>
+                {% else %}
+                <td>{{ dias.attendance }}</td>
+                <td>{{ dias.horas_extras }}</td>
+                {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<button class="btn btn-danger mb-3" id="btnExport" onclick="exportTableToExcel('table-consulta-asistencias')">Descargar tabla en Excel</button>
+{% endif %}
+
+{% endblock %}
+

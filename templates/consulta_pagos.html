@@ -1,0 +1,73 @@
+{% extends './layout.html' %}
+
+{% block title %} Consulta pagos {% endblock %}
+
+{% block body %}
+<div class="container mb-3">
+    <form action="" method="post" class="rounded border border-primary p-3">
+        <div class="row g-3">
+            <legend class="text-center mb-1">Lista de pagos</legend>
+            <div class="form-floating col-md-4">
+                <input type="number" class="form-control" id="semana" name="semana" value="{{ week_number }}"
+                    placeholder="Numero de semana" required />
+                <label for="semana">Número de semana a consultar</label>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select" aria-label="Default select example" name="id_proyecto" id="id_proyecto"
+                    aria-placeholder="Nombre de proyecto" required>
+                    <option value="Selecciona el proyecto" selected>Selecciona el proyecto</option>
+                    {% for proyecto in proyectos %}
+                    <option value="{{ proyecto.id_proyecto }}"> {{ proyecto.nombre_proyecto }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <input type="submit" class="btn btn-primary container-fluid mb-3" value="Consultar" onclick="return validateFormAsistencias()" />
+            </div>
+        </div>
+    </form>
+</div>
+{% if pagos %}
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-warning table-align-middle caption-top" id="table-consulta-pago">
+        <thead class="table-danger">
+            <tr>
+                <th class="text-center">Nombre</th>
+                <th class="text-center">Asistencias</th>
+                <th class="text-center">Horas extras</th>
+                <th class="text-center">Costo horas extras</th>
+                <th class="text-center">Salario base</th>
+                <th class="text-center">Salario base IMSS</th>
+                <th class="text-center">Salario base modificado</th>
+                <th class="text-center">Salario IMSS modificado</th>
+                <th class="text-center">Descuento FONACOT</th>
+                <th class="text-center">Descuento INFONAVIT</th>
+                <th class="text-center">Pago Total</th>
+                <th class="text-center">Complemento de pago</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for pago in pagos %}
+            <tr>
+                <td>{{ pago.empleado.nombre_empleado }}</td>
+                <td class="text-center">{{ pago.asistencias_totales }}</td>
+                <td class="text-center">{{ pago.he_totales }}</td>
+                <td class="text-center">{{ "${:,.2f}".format(pago.empleado.costo_he) }}</td>
+                <td class="text-center">{{ "${:,.2f}".format(pago.empleado.salario_base) }}</td>
+                <td class="text-center">{{ "${:,.2f}".format(pago.empleado.salario_base_IMSS) }}</td>
+                <td class="text-center">{{ "${:,.2f}".format(pago.s_base_modificado) }}</td>
+                <td class="text-center">{{ "${:,.2f}".format(pago.s_imss_modificado) }}</td>
+                <td class="text-center">{{ "${:,.2f}".format(pago.descuento_fonacot_num) }}</td>
+                <td class="text-center">{{ "${:,.2f}".format(pago.descuento_infonavit_num) }}</td>
+                <td class="text-center">{{ "${:,.2f}".format(pago.pago_total) }}</td>
+                <td class="text-center">{{ "${:,.2f}".format(pago.pago_total-pago.s_imss_modificado) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<button class="btn btn-danger mb-3" id="btnExport" onclick="exportTableToExcel('table-consulta-pago')">Descargar tabla en Excel</button>
+{% endif %}
+
+{% endblock %}

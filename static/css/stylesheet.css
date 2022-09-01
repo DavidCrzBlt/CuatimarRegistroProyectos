@@ -1,0 +1,13 @@
+.titulos_verticales{
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.container .navbar-brand img{
+    width: 330px;
+    max-width: 100%;
+}
+
+ul li{
+    list-style-type:none;
+}
