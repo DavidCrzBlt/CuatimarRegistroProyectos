@@ -32,7 +32,12 @@
 {% if empleados %}
 <div class="container">
     <form action="" method="post">
-        <table class="table table-hover table-striped table-warning table-align-middle">
+        <table class="table table-hover table-striped table-warning table-align-middle caption-top">
+            {% if cp == True %}
+            <caption>{{ empleados[0].proyecto.nombre_proyecto}} - {{yesterday}}</caption>
+            {% else %}
+            <caption>{{ empleados[0].proyecto.nombre_proyecto}} - {{today}}</caption>
+            {% endif %}
             <thead class="table-danger">
                 <tr>
                     <th scope="col">Nombre completo</th>
@@ -43,7 +48,11 @@
             <tbody>
                 {% for empleado in empleados %}
                 <tr>
+                    {% if cp == True %}
+                    <td hidden><input name="today" type="date" value="{{ yesterday }}"></td>
+                    {% else %}
                     <td hidden><input name="today" type="date" value="{{ today }}"></td>
+                    {% endif %}
                     <td hidden><input name="proyecto" type="number" value="{{ empleado.proyecto.id_proyecto}}"></td>
                     <td><input hidden name="empleado" type="number"
                             value="{{ empleado.id_empleado}}">{{ empleado.nombre_empleado }}</td>

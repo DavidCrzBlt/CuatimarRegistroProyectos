@@ -72,6 +72,7 @@ class Pago(db.Model):
    asistencias_totales = db.Column(db.Integer)
    he_totales = db.Column(db.Integer)
    pago_total = db.Column(db.Numeric)
+   notas = db.Column(db.String(255))
 
    def __repr__(self):
     return f'<Pago total "{self.pago_total}">'
@@ -211,28 +212,41 @@ def proyectos():
 
 @app.route('/asistencias',methods=["GET","POST"])
 def asistencias():
-    # today = datetime.now().date() - timedelta(days=4)
-    today = datetime.now().date()
+    today = datetime.now().date() - timedelta(days=3)
+    # today = datetime.now().date()
+    yesterday = today - timedelta(days=1)
     proyectos = Proyecto.query.filter_by(status=True)
 
     if request.method == "POST":
         if "id_proyecto" in request.form:
-            checar_asistencia = Asistencia.query.filter_by(id_proyecto=request.form["id_proyecto"]).filter_by(day=today).first()
+            p = request.form["id_proyecto"]
+            checar_asistencia = Asistencia.query.filter_by(id_proyecto=p).filter_by(day=today).first()
+            c = Asistencia.query.filter_by(id_proyecto=p).filter_by(day=yesterday).first()
+            checar_proyecto = Proyecto.query.filter_by(id_proyecto=p).first()
+            if checar_proyecto.trabajo_diario == True and today.weekday() == 0 and c is None:
+                check_project = True
+            else:
+                check_project = False
+
             if checar_asistencia is not None:
                 message="No puedes checar asistencia dos veces el mismo día"
                 return render_template('asistencias.html',message=message,proyectos=proyectos)
+            elif c is not None:
+                empleados = Empleado.query.filter_by(id_proyecto=request.form["id_proyecto"]).all()
+                return render_template('asistencias.html',empleados=empleados,proyectos=proyectos,today=today,yesterday=yesterday,cp = check_project)
             else:
                 empleados = Empleado.query.filter_by(id_proyecto=request.form["id_proyecto"]).all()
-                return render_template('asistencias.html',empleados=empleados,proyectos=proyectos)
+                return render_template('asistencias.html',empleados=empleados,proyectos=proyectos,today=today,yesterday=yesterday,cp = check_project)
 
         if "horas_extras" in request.form:
             e = request.form.getlist('empleado')
             he = request.form.getlist('horas_extras')
             fal = request.form.getlist('attendance')
-            request_values = {"e":e,"he":he,"fal":fal}
+            hoy = request.form.getlist('today')
+            request_values = {"e":e,"he":he,"fal":fal,"hoy":hoy}
             s = 0
             for x in e:
-                registro_asistencia = Asistencia(id_empleado=request_values["e"][s],horas_extras=request_values["he"][s],attendance=request_values["fal"][s],day=today,id_proyecto=request.form["proyecto"])
+                registro_asistencia = Asistencia(id_empleado=request_values["e"][s],horas_extras=request_values["he"][s],attendance=request_values["fal"][s],day=request_values["hoy"][s],id_proyecto=request.form["proyecto"])
                 s = s+1
 
                 db.session.add(registro_asistencia)
@@ -270,6 +284,7 @@ def pagos():
             if ("descuento_FONACOT" or "descuento_INFONAVIT") and "proyecto" in request.form:
                 d_FONACOT = request.form.getlist('descuento_FONACOT')
                 d_INFONAVIT = request.form.getlist('descuento_INFONAVIT')
+                notas = request.form.getlist('notas')
 
                 project = request.form["proyecto"]
                 empleados = Empleado.query.filter_by(id_proyecto=project).all()
@@ -295,11 +310,12 @@ def pagos():
                     salario_imss_modificado = (empleado.salario_base_IMSS/7)*(asis)
 
                     desc_F = float(d_FONACOT[indice])
-                    desc_I = float(d_INFONAVIT[indice])                  
+                    desc_I = float(d_INFONAVIT[indice])  
+                    nota = notas[indice]                
 
                     pago_total = float(salario_base_modificado)+ float(horas_extras*empleado.costo_he) - desc_F - desc_I
                     
-                    new_payment = Pago(fecha_operacion=today,id_movimiento=9,id_proyecto=empleado.id_proyecto,id_empleado=empleado.id_empleado,s_base=empleado.salario_base,s_imss=empleado.salario_base_IMSS,s_base_modificado=round(salario_base_modificado,2),s_imss_modificado=round(salario_imss_modificado,2),descuento_fonacot_num=desc_F,descuento_infonavit_num=desc_I,asistencias_totales=asis,he_totales=horas_extras,pago_total=round(pago_total,2))
+                    new_payment = Pago(fecha_operacion=today,id_movimiento=9,id_proyecto=empleado.id_proyecto,id_empleado=empleado.id_empleado,s_base=empleado.salario_base,s_imss=empleado.salario_base_IMSS,s_base_modificado=round(salario_base_modificado,2),s_imss_modificado=round(salario_imss_modificado,2),descuento_fonacot_num=desc_F,descuento_infonavit_num=desc_I,asistencias_totales=asis,he_totales=horas_extras,pago_total=round(pago_total,2),notas=nota)
 
                     db.session.add(new_payment)
                     db.session.commit()

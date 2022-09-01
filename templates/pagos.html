@@ -39,6 +39,7 @@
                 <th scope="col">Salario IMSS</th>
                 <th scope="col">Descuento FONACOT</th>
                 <th scope="col">Descuento INFONAVIT</th>
+                <th scope="col">Notas</th>
             </tr>
         </thead>
         <tbody>
@@ -67,6 +68,11 @@
                     <input hidden name="descuento_INFONAVIT" type="number" step=".01" placeholder="Descuento INFONAVIT"
                         value="0">
                     {% endif %}
+                </td>
+                <td>
+                    <textarea name="notas" id="notas" cols="20" rows="3">
+
+                    </textarea>
                 </td>
             </tr>
             {% endfor %}
