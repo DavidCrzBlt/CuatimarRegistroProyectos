@@ -30,6 +30,7 @@
 {% if pagos %}
 <div class="table-responsive">
     <table class="table table-hover table-striped table-warning table-align-middle caption-top" id="table-consulta-pago">
+        <caption>{{pagos[0].proyecto.nombre_proyecto}}</caption>
         <thead class="table-danger">
             <tr>
                 <th class="text-center">Nombre</th>
@@ -44,23 +45,25 @@
                 <th class="text-center">Descuento INFONAVIT</th>
                 <th class="text-center">Pago Total</th>
                 <th class="text-center">Complemento de pago</th>
+                <th class="text-center">Notas</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
             {% for pago in pagos %}
-            <tr>
+            <tr class="align-middle">
                 <td>{{ pago.empleado.nombre_empleado }}</td>
                 <td class="text-center">{{ pago.asistencias_totales }}</td>
                 <td class="text-center">{{ pago.he_totales }}</td>
                 <td class="text-center">{{ "${:,.2f}".format(pago.empleado.costo_he) }}</td>
-                <td class="text-center">{{ "${:,.2f}".format(pago.empleado.salario_base) }}</td>
-                <td class="text-center">{{ "${:,.2f}".format(pago.empleado.salario_base_IMSS) }}</td>
+                <td class="text-center">{{ "${:,.2f}".format(pago.s_base) }}</td>
+                <td class="text-center">{{ "${:,.2f}".format(pago.s_imss) }}</td>
                 <td class="text-center">{{ "${:,.2f}".format(pago.s_base_modificado) }}</td>
                 <td class="text-center">{{ "${:,.2f}".format(pago.s_imss_modificado) }}</td>
                 <td class="text-center">{{ "${:,.2f}".format(pago.descuento_fonacot_num) }}</td>
                 <td class="text-center">{{ "${:,.2f}".format(pago.descuento_infonavit_num) }}</td>
                 <td class="text-center">{{ "${:,.2f}".format(pago.pago_total) }}</td>
                 <td class="text-center">{{ "${:,.2f}".format(pago.pago_total-pago.s_imss_modificado) }}</td>
+                <td>{{ pago.notas }}</td>
             </tr>
             {% endfor %}
         </tbody>

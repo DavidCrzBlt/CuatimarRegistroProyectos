@@ -47,8 +47,10 @@
                 <th scope="col">Nombre de empleado</th>
                 <th scope="col">Salario base</th>
                 <th scope="col">Salario base IMSS</th>
+                <th scope="col">Costo horas extras</th>
                 <th scope="col">Descuento FONACOT</th>
                 <th scope="col">Descuento INFONAVIT</th>
+                <th scope="col">Proyecto asignado</th>
                 <th scope="col">Estatus</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -62,6 +64,7 @@
                 <td>{{ empleado.nombre_empleado}}</td>
                 <td>{{ "${:,.2f}".format(empleado.salario_base) }}</td>
                 <td>{{ "${:,.2f}".format(empleado.salario_base_IMSS) }}</td>
+                <td>{{ "${:,.2f}".format(empleado.costo_he) }}</td>
                 {% if empleado.descuento_FONACOT == True %}
                 <td>Sí</td>
                 {% else %}
@@ -72,6 +75,7 @@
                 {% else %}
                 <td>No</td>
                 {% endif %}
+                <td>{{ empleado.proyecto.nombre_proyecto }}</td>
                 {% if empleado.status == True %}
                 <td>Activo</td>
                 {% else %}
