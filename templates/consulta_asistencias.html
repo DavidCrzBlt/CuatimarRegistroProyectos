@@ -27,7 +27,7 @@
         </div>
     </form>
 </div>
-{% if empleados_dias %}
+{% if lista_asistencia %}
 <div class="table-responsive">
     <table class="table table-hover table-striped table-warning table-align-middle caption-top" id="table-consulta-asistencias">
         <thead class="table-danger">
@@ -56,17 +56,12 @@
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            {% for emp in empleados_dias %}
+            {% for m in indice %}
             <tr>
-                <td>{{ emp[0].empleado.nombre_empleado}}</td>
-                {% for dias in emp %}
-                {% if not dias %}
-                <td>0</td>
-                <td>0</td>
-                {% else %}
-                <td>{{ dias.attendance }}</td>
-                <td>{{ dias.horas_extras }}</td>
-                {% endif %}
+                <td class="text-center">{{ lista_asistencia["Nombre"][m] }}</td>
+                {% for dias in count_semana %}
+                <td class="text-center">{{ lista_asistencia["Asistencia"][m][dias] }}</td>
+                <td class="text-center">{{ lista_asistencia["Horas extras"][m][dias] }}</td>
                 {% endfor %}
             </tr>
             {% endfor %}

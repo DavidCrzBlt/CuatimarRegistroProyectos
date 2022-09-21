@@ -15,12 +15,13 @@
                 <th scope="col">Estatus</th>
                 <th scope="col">Ubicación</th>
                 <th scope="col">Cliente</th>
+                <th scope="col">Registro Patronal</th>
                 <th scope="col">Trabajo diario</th>
                 <th scope="col"></th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            {% for proyecto in proyectos %}
+            {% for proyecto in pagination.items %}
             <tr>
                 <td>{{ proyecto.id_proyecto }}</td>
                 <td>{{ proyecto.nombre_proyecto}}</td>
@@ -31,6 +32,7 @@
                 {% endif %}
                 <td>{{ proyecto.ubicacion }}</td>
                 <td>{{ proyecto.cliente }}</td>
+                <td>{{ proyecto.registro_patronal }}</td>
                 {% if proyecto.trabajo_diario == True %}
                 <td>Lunes a domingo</td>
                 {% else %}
@@ -38,7 +40,8 @@
                 {% endif %}
                 <td>
                     <div class="text-center mb-3">
-                        <button class="btn btn-danger" name="{{proyecto.nombre_proyecto}}" value="{{proyecto.id_proyecto}}" onclick="deleteProject(this.value,this.name)">
+                        <button class="btn btn-danger" name="{{proyecto.nombre_proyecto}}"
+                            value="{{proyecto.id_proyecto}}" onclick="deleteProject(this.value,this.name)">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-trash3-fill" viewBox="0 0 16 16">
                                 <path
@@ -52,6 +55,32 @@
         </tbody>
     </table>
 </div>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {% if pagination.has_prev %}
+        <li class="page-item">
+            <a class="page-link" href="{{url_for('consulta_proyectos',page=pagination.prev_num)}}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% endif %}
+        {% for number in pagination.iter_pages() %}
+        {% if pagination.page != number %}
+        <li class="page-item"><a class="page-link" href="{{url_for('consulta_proyectos',page=number)}}">{{number}}</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="#">{{number}}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if pagination.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('consulta_proyectos', page=pagination.next_num) }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
 
 <button class="btn btn-danger mb-3" id="btnExport" onclick="exportTableToExcel('table-consulta-proyectos')">Descargar
     tabla en Excel</button>

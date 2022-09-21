@@ -35,7 +35,20 @@
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endif %}
-
+<div class="container mb-3">
+    <form action="" method="post" class="rounded border border-primary p-3">
+        <div class="row g-3">
+            <div class="form-floating col-md-8">
+                <input type="text" class="form-control" id="nombre" name="nombre"
+                    placeholder="Nombre o id" required />
+                <label for="semana">Busca por nombre</label>
+            </div>
+            <div class="col-md-4">
+                <input type="submit" class="btn btn-primary container-fluid mb-3" value="Búsqueda" onclick="return validateFormAsistencias()" />
+            </div>
+        </div>
+    </form>
+</div>
 <div class="table-responsive">
     <table class="table table-hover table-striped table-warning table-align-middle caption-top"
         id="table-consulta-empleados">
@@ -57,7 +70,7 @@
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            {% for empleado in empleados %}
+            {% for empleado in empleados_activos.items %}
             <tr>
                 <td>{{ empleado.id_empleado }}</td>
                 <td>{{ empleado.clave_banco }}</td>
@@ -75,7 +88,7 @@
                 {% else %}
                 <td>No</td>
                 {% endif %}
-                <td>{{ empleado.proyecto.nombre_proyecto }}</td>
+                <td>{{ empleado.nombre_proyecto}}</td>
                 {% if empleado.status == True %}
                 <td>Activo</td>
                 {% else %}
@@ -96,7 +109,7 @@
                 </td>
                 <td>
                     <div class="text-center mb-3">
-                        <button class="btn btn-danger" name="{{empleado.nombre_empleado}}" value="{{empleado.id_empleado}}" onclick="deleteEmployee(this.value,this.name)">
+                        <button class="btn btn-danger" onclick="deleteEmployee('{{empleado.id_empleado}}','{{empleado.nombre_empleado}}')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-trash3-fill" viewBox="0 0 16 16">
                                 <path
@@ -110,6 +123,31 @@
         </tbody>
     </table>
 </div>
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        {% if empleados_activos.has_prev %}
+        <li class="page-item">
+            <a class="page-link" href="{{url_for('consulta_empleados',page=empleados_activos.prev_num)}}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% endif %}
+        {% for number in empleados_activos.iter_pages() %}
+        {% if empleados_activos.page != number %}
+        <li class="page-item"><a class="page-link" href="{{url_for('consulta_empleados',page=number)}}">{{number}}</a></li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="#">{{number}}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if empleados_activos.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('consulta_empleados', page=empleados_activos.next_num) }}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
 
 <button class="btn btn-danger mb-3" id="btnExport" onclick="exportTableToExcel('table-consulta-empleados')">Descargar
     tabla en Excel</button>

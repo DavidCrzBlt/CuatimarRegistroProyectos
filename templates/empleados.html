@@ -5,19 +5,36 @@
 {% block body %}
 {% if info_empleado %}
 <div class="alert alert-info alert-dismissible fade show" role="alert">
-    {% for element in info_empleado %}
-    <strong>Empleado registrado exitosamente</strong>
+    <strong>El empleado se ha registrado exitosamente</strong>
     <br>
-    <p>Id de empleado: {{element.id_empleado}} &nbsp; &nbsp; &nbsp; Nombre: {{element.nombre_empleado}} &nbsp; &nbsp; &nbsp; Proyecto asignado: {{element.proyecto.nombre_proyecto}} &nbsp; &nbsp; &nbsp; Salario base: {{ "${:,.2f}".format(element.salario_base) }} &nbsp; &nbsp; &nbsp; Salario base IMSS: {{ "${:,.2f}".format(element.salario_base_IMSS) }}</p>
-    {% if element.status == true %}
-    <p>Estado: Activo </p>
-    {% else %}
-    <p>Estado: Inactivo </p>
-    {% endif %}
-    {% endfor %}
+    <ul>
+        <li>Id de empleado: {{info_empleado.id_empleado}} </li>
+        <li>Nombre: {{info_empleado.nombre_empleado}}</li>
+        <li>Proyecto asignado: {{info_salario.proyecto.nombre_proyecto}}</li>
+        <li>Salario base:
+            {{ "${:,.2f}".format(info_salario.salario_base) }}</li>
+        <li>Salario base IMSS:
+            {{ "${:,.2f}".format(info_salario.salario_base_IMSS) }}</li>
+        {% if info_empleado.status == true %}
+        <li>Estado: Activo</li>
+        {% else %}
+        <li>Estado: Inactivo</li>
+        {% endif %}
+        {% if info_empleado.descuento_FONACOT == true %}
+        <li>Descuento FONACOT: Sí</li>
+        {% else %}
+        <li>Descuento FONACOT: No </li>
+        {% endif %}
+        {% if info_empleado.descuento_INFONAVIT == true %}
+        <li>Descuento INFONAVIT: Sí</li>
+        {% else %}
+        <li>Descuento INFONAVIT: No </li>
+        {% endif %}
+    </ul>   
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endif %}
+
 {% if message %}
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
     <strong>{{ message}}</strong>

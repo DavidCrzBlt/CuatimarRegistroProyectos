@@ -4,6 +4,64 @@
 
 {% block body %}
 
+<div class="table-responsive">
+    <table class="table table-hover table-striped table-warning table-align-middle caption-top"
+        id="table-consulta-empleados">
+        <caption>Lista de empleados</caption>
+        <thead class="table-danger">
+            <tr>
+                <th scope="col">ID de empleado</th>
+                <th scope="col">Clave banco</th>
+                <th scope="col">Nombre de empleado</th>
+                <th scope="col">Salario base</th>
+                <th scope="col">Salario base IMSS</th>
+                <th scope="col">Costo horas extras</th>
+                <th scope="col">Descuento FONACOT</th>
+                <th scope="col">Descuento INFONAVIT</th>
+                <th scope="col">Proyecto asignado</th>
+                <th scope="col">Estatus</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for datos in datos_trabajador %}
+            <tr>
+                <td>{{ datos.id_empleado }}</td>
+                <td>{{ datos.empleado.clave_banco }}</td>
+                <td>{{ datos.empleado.nombre_empleado}}</td>
+                <td>{{ "${:,.2f}".format(datos.salario_base) }}</td>
+                <td>{{ "${:,.2f}".format(datos.salario_base_IMSS) }}</td>
+                <td>{{ "${:,.2f}".format(datos.costo_he) }}</td>
+                {% if datos.empleado.descuento_FONACOT == True %}
+                <td>Sí</td>
+                {% else %}
+                <td>No</td>
+                {% endif %}
+                {% if datos.empleado.descuento_INFONAVIT == True %}
+                <td>Sí</td>
+                {% else %}
+                <td>No</td>
+                {% endif %}
+                <td>{{ datos.proyecto.nombre_proyecto }}</td>
+                {% if datos.status == True %}
+                <td>Activo</td>
+                {% else %}
+                <td>Inactivo</td>
+                {% endif %}
+                <td>
+                    <div class="text-center mb-3">
+                        <a href="{{url_for('reasignarEmpleado',proyecto=datos.id_proyecto,empleado=datos.id_empleado)}}" class="btn btn-danger">
+                            Asignar empleado
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
 
 <div class="container mt-3">
 
@@ -11,38 +69,38 @@
         <div class="row g-3">
             <legend class="text-center">Modificación de datos de empleado</legend>
             <input class="form-control" type="number" name="id_empleado" id="id_empleado"
-                value="{{info_empleado.id_empleado}}" hidden>
+                value="{{trabajador.id_empleado}}" hidden>
             <div class="form-floating col-md-6">
                 <input class="form-control" type="number" name="clave_banco" id="clave_banco"
-                    value="{{info_empleado.clave_banco}}" aria-label="Disabled input clave banco" disabled readonly>
+                    value="{{trabajador.empleado.clave_banco}}" aria-label="Disabled input clave banco" disabled
+                    readonly>
                 <label for="clave_banco">Clave banco empleado</label>
             </div>
             <div class="form-floating col-md-6">
                 <input class="form-control" type="text" name="nombre_empleado" id="nombre_empleado"
-                    value="{{info_empleado.nombre_empleado}}" aria-label="Disabled input nombre empleado" disabled
-                    readonly>
+                    value="{{trabajador.empleado.nombre_empleado}}">
                 <label for="nombre_empleado">Nombre completo</label>
             </div>
             <div class="form-floating col-md-6">
                 <input type="number" step=".01" class="form-control" id="salario_base" name="salario_base"
-                    value="{{info_empleado.salario_base}}" placeholder="Salario base" required />
+                    value="{{trabajador.salario_base}}" placeholder="Salario base" required />
                 <label for="salario_base">Salario base</label>
             </div>
             <div class="form-floating col-md-6">
                 <input type="number" step=".01" class="form-control" name="salario_base_IMSS" id="salario_base_IMSS"
-                    value="{{info_empleado.salario_base_IMSS}}" placeholder="Salario base IMSS" required />
+                    value="{{trabajador.salario_base_IMSS}}" placeholder="Salario base IMSS" required />
                 <label for="salario_base_IMSS">Salario base IMSS</label>
             </div>
             <div class="form-floating col-md-6">
                 <input type="number" step=".01" class="form-control" name="valor_he" id="valor_he"
-                    value="{{info_empleado.costo_he}}" required />
+                    value="{{trabajador.costo_he}}" required />
                 <label for="valor_he">Valor hora extra</label>
             </div>
             <div class="col-md-6">
                 <label for="descuento_FONACOT">Descuento FONACOT</label>
                 <select class="form-select" name="descuento_FONACOT" id="descuento_FONACOT"
                     aria-placeholder="Descuento FONACOT" required>
-                    {% if info_empleado.descuento_FONACOT == true %}
+                    {% if trabajador.empleado.descuento_FONACOT == true %}
                     <option value="true" selected>Sí</option>
                     <option value="false">No</option>
                     {% else %}
@@ -55,7 +113,7 @@
                 <label for="descuento_INFONAVIT">Descuento INFONAVIT</label>
                 <select class="form-select" name="descuento_INFONAVIT" id="descuento_INFONAVIT"
                     aria-placeholder="Descuento INFONAVIT" required>
-                    {% if info_empleado.descuento_INFONAVIT == true %}
+                    {% if trabajador.empleado.descuento_INFONAVIT == true %}
                     <option value="true" selected>Sí</option>
                     <option value="false">No</option>
                     {% else %}
@@ -64,24 +122,19 @@
                     {% endif %}
                 </select>
             </div>
-            <div class="col-md-6 mb-3">
-                <label for="proyecto">Proyectos</label>
-                <select class="form-select" name="proyecto" id="proyecto" aria-placeholder="Selecciona proyecto"
-                    required>
-                    {% for proyecto in proyectos %}
-                    {% if info_empleado.id_proyecto == proyecto.id_proyecto %}
-                    <option value="{{proyecto.id_proyecto}}" selected>{{proyecto.nombre_proyecto}}</option>
-                    {% else %}
-                    <option value="{{proyecto.id_proyecto}}">{{proyecto.nombre_proyecto}}</option>
-                    {% endif %}
-                    {% endfor %}
-                </select>
-            </div>
+            <select class="form-select" id="id_proyecto" aria-label="Default select example" name="id_proyecto"
+                aria-placeholder="Nombre de proyecto" required>
+                <option value="Selecciona el proyecto" selected>Selecciona el proyecto</option>
+                {% for proyecto in proyectos %}
+                <option value="{{proyecto.id_proyecto}}"> {{ proyecto.nombre_proyecto }}</option>
+                {% endfor %}
+            </select>
             <input type="submit" class="btn btn-danger col-md-4 offset-md-4 mb-4" value="Actualizar datos"
                 onclick="return validateForm()" />
         </div>
     </form>
 </div>
+
 {% endblock %}
 
 {% block script %}

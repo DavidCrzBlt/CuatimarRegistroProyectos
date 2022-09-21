@@ -8,15 +8,18 @@
 <div class="alert alert-info alert-dismissible fade show" role="alert">
     {% for element in info_proyectos %}
     <strong>Proyecto registrado exitosamente</strong>
-    <p>Código del proyecto: {{element.id_proyecto}}</p>
-    <p>Nombre del proyecto: {{element.nombre_proyecto}}</p>
-    <p>Ubicación: {{element.ubicacion}}</p>
-    <p>Cliente: {{element.cliente}}</p>
-    {% if element.status == true %}
-    <p>Estado del proyecto: Activo </p>
-    {% else %}
-    <p>Estado del proyecto: Inactivo </p>
-    {% endif %}
+    <ul>
+        <li>Código del proyecto: {{element.id_proyecto}}</li>
+        <li>Nombre del proyecto: {{element.nombre_proyecto}}</li>
+        <li>Registro Patronal: {{element.registro_patronal}}</li>
+        <li>Ubicación: {{element.ubicacion}}</li>
+        <li>Cliente: {{element.cliente}}</li>
+        {% if element.status == true %}
+        <li>Estado del proyecto: Activo </li>
+        {% else %}
+        <li>Estado del proyecto: Inactivo</li>
+        {% endif %}
+    </ul>
     {% endfor %}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
@@ -35,6 +38,10 @@
             <div class="form-floating col-md-6">
                 <input class="form-control" type="text" id="nombre_proyecto" name="nombre_proyecto" required />
                 <label for="nombre_proyecto">Nombre del proyecto</label>
+            </div>
+            <div class="form-floating col-md-6">
+                <input class="form-control" type="number" id="registro_patronal" name="registro_patronal" required />
+                <label for="registro_patronal">Registro patronal</label>
             </div>
             <div class="form-floating col-md-6">
                 <input class="form-control" type="text" id="cliente" name="cliente" required />

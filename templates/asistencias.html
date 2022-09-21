@@ -40,6 +40,7 @@
             {% endif %}
             <thead class="table-danger">
                 <tr>
+                    <th scope="col">Id empleado</th>
                     <th scope="col">Nombre completo</th>
                     <th scope="col">Horas extras</th>
                     <th scope="col">Asistencia</th>
@@ -53,9 +54,10 @@
                     {% else %}
                     <td hidden><input name="today" type="date" value="{{ today }}"></td>
                     {% endif %}
-                    <td hidden><input name="proyecto" type="number" value="{{ empleado.proyecto.id_proyecto}}"></td>
+                    <td hidden><input name="proyecto" type="number" value="{{ empleado.id_proyecto}}"></td>
+                    <td>{{ empleado.id_empleado}}</td>
                     <td><input hidden name="empleado" type="number"
-                            value="{{ empleado.id_empleado}}">{{ empleado.nombre_empleado }}</td>
+                            value="{{ empleado.id_empleado}}">{{ empleado.empleado.nombre_empleado }}</td>
                     <td><input type="number" name="horas_extras" value="0" required></td>
                     <td>
                         <select class="form-select" name="attendance" id="attendance">
