@@ -54,7 +54,7 @@
                 <td>{{ pago.empleado.nombre_empleado }}</td>
                 <td class="text-center">{{ pago.asistencias_totales }}</td>
                 <td class="text-center">{{ pago.he_totales }}</td>
-                <td class="text-center">{{ "${:,.2f}".format(pago.empleado.costo_he) }}</td>
+                <td class="text-center">{{ "${:,.2f}".format(pago.costo_he) }}</td>
                 <td class="text-center">{{ "${:,.2f}".format(pago.s_base) }}</td>
                 <td class="text-center">{{ "${:,.2f}".format(pago.s_imss) }}</td>
                 <td class="text-center">{{ "${:,.2f}".format(pago.s_base_modificado) }}</td>
@@ -62,7 +62,7 @@
                 <td class="text-center">{{ "${:,.2f}".format(pago.descuento_fonacot_num) }}</td>
                 <td class="text-center">{{ "${:,.2f}".format(pago.descuento_infonavit_num) }}</td>
                 <td class="text-center">{{ "${:,.2f}".format(pago.pago_total) }}</td>
-                <td class="text-center">{{ "${:,.2f}".format(pago.pago_total-pago.s_imss_modificado) }}</td>
+                <td class="text-center">{{ "${:,.2f}".format(pago.diferencia) }}</td>
                 <td>{{ pago.notas }}</td>
             </tr>
             {% endfor %}

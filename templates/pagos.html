@@ -1,11 +1,11 @@
 {% extends './layout.html' %}
 
-{% block title %} Lista de empleados {% endblock %}
+{% block title %} Ejecutar pagos {% endblock %}
 
 {% block body %}
 {% if message %}
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
-    <strong>¡Espera!</strong> {{message}}
+    {{message}}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endif %}
@@ -23,59 +23,104 @@
                 </select>
             </div>
             <div class="col-md-4 mb-1">
-                <input type="submit" class="btn btn-danger container-fluid mb-3" value="Consultar" onclick="return validateFormAsistencias()"/>
+                <input type="submit" class="btn btn-danger container-fluid mb-3" value="Consultar"
+                    onclick="return validateFormAsistencias()" />
             </div>
         </div>
     </form>
 </div>
-
-{% if empleados %}
+<br>
+{% if lista_pagos %}
 <form action="" method="post">
-    <table class="table table-hover table-striped table-warning table-align-middle">
+    <table class="table table-hover table-striped table-warning table-align-middle caption-top">
+        <caption>Pago de la semana {{num_semana}} del proyecto {{project.nombre_proyecto}}</caption>
         <thead class="table-danger">
             <tr>
-                <th scope="col">Nombre completo</th>
+                <th scope="col">ID</th>
+                <th scope="col">Nombre</th>
+                <th class="titulos_verticales" scope="col">Asistencia</th>
+                <th scope="col">Horas extras</th>
                 <th scope="col">Salario base</th>
                 <th scope="col">Salario IMSS</th>
+                <th scope="col">Salario modificado</th>
+                <th scope="col">Salario IMSS modificado</th>
+                <th scope="col">Costo horas extras</th>
                 <th scope="col">Descuento FONACOT</th>
                 <th scope="col">Descuento INFONAVIT</th>
+                <th scope="col">Total</th>
+                <th scope="col">Diferencia</th>
                 <th scope="col">Notas</th>
             </tr>
         </thead>
         <tbody>
-            {% for empleado in empleados %}
+            {% for m in indice %}
             <tr>
                 <td hidden>
-                    <input name="proyecto" type="number" step=".01" value="{{ empleado.id_proyecto }}">
+                    <input name="ids" id="ids" type="number" style="width:80px;" value="{{ lista_pagos['ids'][m]}}" readonly>
                 </td>
-                <td>{{ empleado.nombre_empleado}}</td>
-                <td>{{ "${:,.2f}".format(empleado.salario_base) }}</td>
-                <td>{{ "${:,.2f}".format(empleado.salario_base_IMSS) }}</td>
+                <td class="text-center"></td>
+                <td>{{ lista_pagos['Nombre'][m]}}</td>
+                <td hidden>
+                    <input name="asistencia" id="asistencia" type="number" style="width:80px;" value="{{ lista_pagos['Asistencia'][m]}}" readonly>
+                </td>
+                <td class="text-center"></td>
+                <td hidden>
+                    <input name="he" id="he" type="number" style="width:80px;" value="{{ lista_pagos['Horas extras'][m] }}" readonly>
+                </td>
+                <td class="text-center"></td>
+                <td hidden>
+                    <input name="salario_base" id="salario_base" type="number" step=".01" value="{{ lista_pagos['Salario base'][m] }}">
+                </td>
+                <td class="text-center"></td>
+                <td hidden>
+                    <input name="salario_imss" id="salario_imss" type="number" step=".01" value="{{ lista_pagos['Salario IMSS'][m] }}">
+                </td>
+                <td class="text-center"></td>
+                <td hidden> 
+                    <input name="salario_base_mod" id="salario_base_mod" type="number" step=".01" value="{{ lista_pagos['Salario base modificado'][m] }}">
+                </td>
+                <td class="text-center"></td>
+                <td hidden>
+                    <input name="salario_imss_mod" id="salario_imss_mod" type="number" step=".01" value="{{ lista_pagos['Salario IMSS modificado'][m] }}">
+                </td>
+                <td class="text-center"></td>
+                <td hidden>
+                    <input name="costo_he" id="costo_he" type="number" step=".01" value="{{ lista_pagos['Costo horas extras'][m] }}">
+                </td>
+                <td class="text-center"></td>
                 <td>
-                    {% if empleado.descuento_FONACOT == True %}
-                    <input name="descuento_FONACOT" type="number" step=".01" placeholder="Descuento FONACOT" value="0"
-                        required>
+                    {% if lista_pagos["Descuento FONACOT"][m] == True %}
+                    <input style="width:80px;" class="descuento" name="descuento_FONACOT" type="number" step=".01"
+                        placeholder="Descuento FONACOT" value="0" required>
                     {% else %}
-                    <input hidden name="descuento_FONACOT" type="number" step=".01" placeholder="Descuento FONACOT"
-                        value="0">
+                    <input style="width:80px;" class="descuento" name="descuento_FONACOT" type="number" step=".01"
+                        placeholder="Descuento FONACOT" value="0" readonly>
                     {% endif %}
                 </td>
                 <td>
-                    {% if empleado.descuento_INFONAVIT == True %}
-                    <input name="descuento_INFONAVIT" type="number" step=".01" placeholder="Descuento INFONAVIT"
-                        value="0" required>
+                    {% if lista_pagos["Descuento INFONAVIT"][m] == True %}
+                    <input style="width:80px;" class="descuento" name="descuento_INFONAVIT" type="number" step=".01"
+                        placeholder="Descuento INFONAVIT" value="0" required>
                     {% else %}
-                    <input hidden name="descuento_INFONAVIT" type="number" step=".01" placeholder="Descuento INFONAVIT"
-                        value="0">
+                    <input style="width:80px;" class="descuento" name="descuento_INFONAVIT" type="number" step=".01"
+                        placeholder="Descuento INFONAVIT" value="0" readonly>
                     {% endif %}
                 </td>
+                <td hidden>
+                    <input name="pago_total" id="pago_total" type="number" step=".01" readonly>
+                </td>
+                <td></td>
+                <td hidden>
+                    <input name="diferencia" id="diferencia" type="number" step=".01" readonly>
+                </td>
+                <td></td>
                 <td>
-                    <textarea name="notas" id="notas" cols="20" rows="3">
-
+                    <textarea name="notas" id="notas" cols="20" rows="2">
                     </textarea>
                 </td>
             </tr>
             {% endfor %}
+            <input hidden type="number" name="proyecto" id="proyecto" value="{{project.id_proyecto}}">
         </tbody>
     </table>
     <input type="submit" class="btn btn-primary mb-3" value="Registrar pagos" />
@@ -85,4 +130,5 @@
 
 {% block script %}
 <script type="text/javascript" src="{{url_for('static',filename='js/app.js')}}"></script>
+<script type="text/javascript" src="{{url_for('static',filename='js/calcular_pago.js')}}"></script>
 {% endblock %}
