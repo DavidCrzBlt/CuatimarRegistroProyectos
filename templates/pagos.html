@@ -47,49 +47,77 @@
                 <th scope="col">Costo horas extras</th>
                 <th scope="col">Descuento FONACOT</th>
                 <th scope="col">Descuento INFONAVIT</th>
+                <th scope="col">Descuento</th>
                 <th scope="col">Total</th>
-                <th scope="col">Diferencia</th>
+                <th scope="col">Complemento de pago</th>
                 <th scope="col">Notas</th>
             </tr>
         </thead>
         <tbody>
             {% for m in indice %}
             <tr>
+                <!-- 0 -->
                 <td hidden>
+                    <!-- 0 -->
                     <input name="ids" id="ids" type="number" style="width:80px;" value="{{ lista_pagos['ids'][m]}}" readonly>
                 </td>
+                <!-- 1 -->
                 <td class="text-center"></td>
+                <!-- 2 -->
                 <td>{{ lista_pagos['Nombre'][m]}}</td>
+                <!-- 3 -->
                 <td hidden>
+                    <!-- 1 -->
                     <input name="asistencia" id="asistencia" type="number" style="width:80px;" value="{{ lista_pagos['Asistencia'][m]}}" readonly>
                 </td>
+                <!-- 4 -->
                 <td class="text-center"></td>
+                <!-- 5 -->
                 <td hidden>
+                    <!-- 2 -->
                     <input name="he" id="he" type="number" style="width:80px;" value="{{ lista_pagos['Horas extras'][m] }}" readonly>
                 </td>
+                <!-- 6 -->
                 <td class="text-center"></td>
+                <!-- 7 -->
                 <td hidden>
+                    <!-- 3 -->
                     <input name="salario_base" id="salario_base" type="number" step=".01" value="{{ lista_pagos['Salario base'][m] }}">
                 </td>
+                <!-- 8 -->
                 <td class="text-center"></td>
+                <!-- 9 -->
                 <td hidden>
+                    <!-- 4 -->
                     <input name="salario_imss" id="salario_imss" type="number" step=".01" value="{{ lista_pagos['Salario IMSS'][m] }}">
                 </td>
+                <!-- 10 -->
                 <td class="text-center"></td>
+                <!-- 11 -->
                 <td hidden> 
-                    <input name="salario_base_mod" id="salario_base_mod" type="number" step=".01" value="{{ lista_pagos['Salario base modificado'][m] }}">
+                    <!-- 5 -->
+                    <input name="salario_base_mod" id="salario_base_mod" type="number" step=".01" value="0">
                 </td>
+                <!-- 12 -->
                 <td class="text-center"></td>
+                <!-- 13 -->
                 <td hidden>
-                    <input name="salario_imss_mod" id="salario_imss_mod" type="number" step=".01" value="{{ lista_pagos['Salario IMSS modificado'][m] }}">
+                    <!-- 6 -->
+                    <input name="salario_imss_mod" id="salario_imss_mod" type="number" step=".01" value="0">
                 </td>
+                <!-- 14 -->
                 <td class="text-center"></td>
+                <!-- 15 -->
                 <td hidden>
+                    <!-- 7 -->
                     <input name="costo_he" id="costo_he" type="number" step=".01" value="{{ lista_pagos['Costo horas extras'][m] }}">
                 </td>
+                <!-- 16 -->
                 <td class="text-center"></td>
+                <!-- 17 -->
                 <td>
                     {% if lista_pagos["Descuento FONACOT"][m] == True %}
+                    <!-- 8 -->
                     <input style="width:80px;" class="descuento" name="descuento_FONACOT" type="number" step=".01"
                         placeholder="Descuento FONACOT" value="0" required>
                     {% else %}
@@ -97,8 +125,10 @@
                         placeholder="Descuento FONACOT" value="0" readonly>
                     {% endif %}
                 </td>
+                <!-- 18 -->
                 <td>
                     {% if lista_pagos["Descuento INFONAVIT"][m] == True %}
+                    <!-- 9 -->
                     <input style="width:80px;" class="descuento" name="descuento_INFONAVIT" type="number" step=".01"
                         placeholder="Descuento INFONAVIT" value="0" required>
                     {% else %}
@@ -106,14 +136,26 @@
                         placeholder="Descuento INFONAVIT" value="0" readonly>
                     {% endif %}
                 </td>
+                <!-- 19 -->
+                <td>
+                    <!-- 10 -->
+                    <input class="descuento" name="descuento" id="descuento" type="number" step=".01" value="0">
+                </td>
+                <!-- 20 -->
                 <td hidden>
+                    <!-- 11 -->
                     <input name="pago_total" id="pago_total" type="number" step=".01" readonly>
                 </td>
+                <!-- 21 -->
                 <td></td>
+                <!-- 22 -->
                 <td hidden>
+                    <!-- 12 -->
                     <input name="diferencia" id="diferencia" type="number" step=".01" readonly>
                 </td>
+                <!-- 23 -->
                 <td></td>
+                <!-- 24 -->
                 <td>
                     <textarea name="notas" id="notas" cols="20" rows="2">
                     </textarea>

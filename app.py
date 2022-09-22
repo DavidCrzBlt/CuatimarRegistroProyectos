@@ -83,6 +83,7 @@ class Pago(db.Model):
     s_imss_modificado = db.Column(db.Numeric)
     descuento_fonacot_num = db.Column(db.Numeric)
     descuento_infonavit_num = db.Column(db.Numeric)
+    descuento = db.Column(db.Numeric)
     asistencias_totales = db.Column(db.Integer)
     he_totales = db.Column(db.Integer)
     costo_he = db.Column(db.Numeric)
@@ -231,7 +232,7 @@ def asistencias():
 
 @app.route('/pagos', methods=["GET", "POST"])
 def pagos():
-    today = datetime.now().date()+timedelta(days=1)
+    today = datetime.now().date()
     num_semana = today.strftime("%U")
     proyectos = Proyecto.query.filter_by(status=True)
 
@@ -298,7 +299,7 @@ def pagos():
                                             listado_infonavit.append(names.empleado.descuento_INFONAVIT)
                                             s=True
 
-                    lista_pagos = {"ids":listado_ids,"Nombre":listado_nombres,"Asistencia":[],"Horas extras":[],"Salario base":[],"Salario IMSS":[],"Salario base modificado":[],"Salario IMSS modificado":[],"Costo horas extras":[],"Descuento FONACOT":listado_fonacot,"Descuento INFONAVIT":listado_infonavit}
+                    lista_pagos = {"ids":listado_ids,"Nombre":listado_nombres,"Asistencia":[],"Horas extras":[],"Salario base":[],"Salario IMSS":[],"Costo horas extras":[],"Descuento FONACOT":listado_fonacot,"Descuento INFONAVIT":listado_infonavit}
                     
                     for empleado in listado_ids:
                         contador_asistencias = 0
@@ -324,12 +325,6 @@ def pagos():
                         lista_pagos["Costo horas extras"].append(empleado_info.costo_he)
                         lista_pagos["Salario base"].append(empleado_info.salario_base)
                         lista_pagos["Salario IMSS"].append(empleado_info.salario_base_IMSS)
-
-                        salario_base_modificado = round((empleado_info.salario_base/7)*(contador_asistencias),2)
-                        salario_imss_modificado = round((empleado_info.salario_base_IMSS/7)*(contador_asistencias),2)
-
-                        lista_pagos["Salario base modificado"].append(salario_base_modificado)
-                        lista_pagos["Salario IMSS modificado"].append(salario_imss_modificado)
             
                     indice = list(range(0,len(listado_nombres)))
 
@@ -345,6 +340,7 @@ def pagos():
                 s_imss_mod = request.form.getlist('salario_imss_mod')
                 d_FONACOT = request.form.getlist('descuento_FONACOT')
                 d_INFONAVIT = request.form.getlist('descuento_INFONAVIT')
+                discount = request.form.getlist('descuento')
                 asistencias_totales = request.form.getlist('asistencia')
                 he_totales = request.form.getlist('he')
                 costo_he = request.form.getlist('costo_he')
@@ -355,7 +351,7 @@ def pagos():
 
                 l = 0
                 while l < len(id_empleado):
-                    new_payment = Pago(fecha_operacion=today, id_proyecto=project, id_empleado=id_empleado[l], s_base=s_base[l], s_imss=s_imss[l], s_base_modificado=s_base_mod[l], s_imss_modificado=s_imss_mod[l], descuento_fonacot_num=d_FONACOT[l], descuento_infonavit_num=d_INFONAVIT[l], asistencias_totales=asistencias_totales[l], he_totales=he_totales[l],costo_he=costo_he[l], pago_total=pago_total[l], diferencia=diferencia[l], notas=notas[l])
+                    new_payment = Pago(fecha_operacion=today, id_proyecto=project, id_empleado=id_empleado[l], s_base=s_base[l], s_imss=s_imss[l], s_base_modificado=s_base_mod[l], s_imss_modificado=s_imss_mod[l], descuento_fonacot_num=d_FONACOT[l], descuento_infonavit_num=d_INFONAVIT[l],descuento=discount[l], asistencias_totales=asistencias_totales[l], he_totales=he_totales[l],costo_he=costo_he[l], pago_total=pago_total[l], diferencia=diferencia[l], notas=notas[l])
                     
                     db.session.add(new_payment)
                     db.session.commit()
