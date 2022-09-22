@@ -305,7 +305,7 @@ def pagos():
                         contador_asistencias = 0
                         contador_horas_extras = 0
                         for m in dias_semana:
-                            dia = Asistencia.query.filter_by(id_empleado=empleado,day=m).first()
+                            dia = Asistencia.query.filter_by(id_empleado=empleado,day=m,id_proyecto=project).first()
                             if dia is not None:
                                 contador_asistencias = contador_asistencias + dia.attendance
                                 contador_horas_extras = contador_horas_extras + dia.horas_extras
@@ -443,7 +443,7 @@ def consulta_asistencias():
             asistencias_semana = []
             horas_extras_semana = []
             for m in dias_semana:
-                dia = Asistencia.query.filter_by(id_empleado=empleado,day=m).first()
+                dia = Asistencia.query.filter_by(id_empleado=empleado,day=m,id_proyecto=idproyecto).first()
                 if dia is not None:
                     asistencias_semana.append(dia.attendance)
                     horas_extras_semana.append(dia.horas_extras)

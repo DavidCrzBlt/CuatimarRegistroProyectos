@@ -22,7 +22,6 @@ function calcularPago(){
         var costo_he = numberFormat.format(inputs[7].value);
         columns[16].textContent = costo_he;
 
-        if (s_base!=s_base_imss) {
             complemento_pago = s_base - s_base_imss;
             pago_dia = ((s_base/7)*(7-asistencias)).toFixed(2);
             if (pago_dia > complemento_pago){
@@ -99,10 +98,7 @@ function calcularPago(){
                     var diferencia_format = numberFormat.format(diferencia);
                     columns[23].textContent = diferencia_format;
                 }   
-            }
-        }
-        
-        
+            }      
     }
 }
 
