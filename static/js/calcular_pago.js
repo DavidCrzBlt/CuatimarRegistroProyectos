@@ -45,7 +45,7 @@ function calcularPago(){
                     columns[21].textContent = pago_format;
 
                     var diferencia = parseFloat(0);
-                    inputs[11].value = diferencia;
+                    inputs[12].value = diferencia;
                     var diferencia_format = numberFormat.format(diferencia);
                     columns[23].textContent = diferencia_format;
 
@@ -56,7 +56,7 @@ function calcularPago(){
                     columns[21].textContent = pago_format;
 
                     var diferencia = parseFloat(pago-inputs[6].value);
-                    inputs[11].value = diferencia.toFixed(2);
+                    inputs[12].value = diferencia.toFixed(2);
                     var diferencia_format = numberFormat.format(diferencia);
                     columns[23].textContent = diferencia_format;
                 }
@@ -83,7 +83,7 @@ function calcularPago(){
                     columns[21].textContent = pago_format;
 
                     var diferencia = parseFloat(0);
-                    inputs[11].value = diferencia;
+                    inputs[12].value = diferencia;
                     var diferencia_format = numberFormat.format(diferencia);
                     columns[23].textContent = diferencia_format;
 
@@ -94,7 +94,7 @@ function calcularPago(){
                     columns[21].textContent = pago_format;
 
                     var diferencia = parseFloat(pago-inputs[6].value);
-                    inputs[11].value = diferencia.toFixed(2);
+                    inputs[12].value = diferencia.toFixed(2);
                     var diferencia_format = numberFormat.format(diferencia);
                     columns[23].textContent = diferencia_format;
                 }   
