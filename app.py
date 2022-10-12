@@ -232,7 +232,7 @@ def asistencias():
 
 @app.route('/pagos', methods=["GET", "POST"])
 def pagos():
-    today = datetime.now().date()
+    today = datetime.now().date()-timedelta(days=6)
     num_semana = today.strftime("%U")
     proyectos = Proyecto.query.filter_by(status=True)
 
