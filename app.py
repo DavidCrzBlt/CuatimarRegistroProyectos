@@ -19,7 +19,7 @@ db = SQLAlchemy(app)
 class Proyecto(db.Model):
     id_proyecto = db.Column('id_proyecto', db.Integer, primary_key=True)
     nombre_proyecto = db.Column(db.String(255), unique=True)
-    registro_patronal = db.Column(db.Integer)
+    registro_patronal = db.Column(db.String(255))
     status = db.Column(db.Boolean)
     ubicacion = db.Column(db.String(200))
     cliente = db.Column(db.String(200))
