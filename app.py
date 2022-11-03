@@ -183,7 +183,7 @@ def empleados():
 
 @app.route('/asistencias', methods=["GET", "POST"])
 def asistencias():
-    today = datetime.now().date()-timedelta(days=3)
+    today = datetime.now().date()-timedelta(days=1)
     yesterday = today-timedelta(days=1)
     proyectos = Proyecto.query.filter_by(status=True)
 
