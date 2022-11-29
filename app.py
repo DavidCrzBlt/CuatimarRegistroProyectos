@@ -7,6 +7,7 @@ import os
 
 app = Flask(__name__)
 
+
 # app.config['SQLALCHEMY_DATABASE_URI'] = config.SQLALCHEMY_DATABASE_URI
 # app.config['SECRET_KEY'] = config.SECRET_KEY
 
@@ -572,7 +573,6 @@ def eliminarProyecto(variable):
         db.session.commit()
 
     return redirect(url_for('consulta_proyectos'))
-
 
 
 if __name__ == '__main__':
