@@ -574,6 +574,7 @@ def eliminarProyecto(variable):
     return redirect(url_for('consulta_proyectos'))
 
 
+
 if __name__ == '__main__':
     db.create_all()
     app.run()
