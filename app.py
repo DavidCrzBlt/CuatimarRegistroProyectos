@@ -250,19 +250,19 @@ def pagos():
                     message = "No puedes realizar dos pagos al mismo proyecto el mismo día"
                     return render_template('pagos.html', message=message, proyectos=proyectos)
                 else:
-                    lun_arg = '2022 ' + str(num_semana) + ' 1'
+                    lun_arg = '2023 ' + str(num_semana) + ' 1'
                     lun = time.asctime(time.strptime(lun_arg, '%Y %W %w'))
-                    mar_arg = '2022 ' + str(num_semana) + ' 2'
+                    mar_arg = '2023 ' + str(num_semana) + ' 2'
                     mar = time.asctime(time.strptime(mar_arg, '%Y %W %w'))
-                    mier_arg = '2022 ' + str(num_semana) + ' 3'
+                    mier_arg = '2023 ' + str(num_semana) + ' 3'
                     mier = time.asctime(time.strptime(mier_arg, '%Y %W %w'))
-                    jue_arg = '2022 ' + str(int(num_semana)-1) + ' 4'
+                    jue_arg = '2023 ' + str(int(num_semana)-1) + ' 4'
                     jue = time.asctime(time.strptime(jue_arg, '%Y %W %w'))
-                    vie_arg = '2022 ' + str(int(num_semana)-1) + ' 5'
+                    vie_arg = '2023 ' + str(int(num_semana)-1) + ' 5'
                     vie = time.asctime(time.strptime(vie_arg, '%Y %W %w'))
-                    sab_arg = '2022 ' + str(int(num_semana)-1) + ' 6'
+                    sab_arg = '2023 ' + str(int(num_semana)-1) + ' 6'
                     sab = time.asctime(time.strptime(sab_arg, '%Y %W %w'))
-                    dom_arg = '2022 ' + str(int(num_semana)-1) + ' 0'
+                    dom_arg = '2023 ' + str(int(num_semana)-1) + ' 0'
                     dom = time.asctime(time.strptime(dom_arg, '%Y %W %w'))
 
                     dias_semana=[jue,vie,sab,dom,lun,mar,mier]
@@ -394,19 +394,19 @@ def consulta_asistencias():
         semana = request.form["semana"]
         idproyecto = request.form["id_proyecto"]
 
-        lun_arg = '2022 ' + str(semana) + ' 1'
+        lun_arg = '2023 ' + str(semana) + ' 1'
         lun = time.asctime(time.strptime(lun_arg, '%Y %W %w'))
-        mar_arg = '2022 ' + str(semana) + ' 2'
+        mar_arg = '2023 ' + str(semana) + ' 2'
         mar = time.asctime(time.strptime(mar_arg, '%Y %W %w'))
-        mier_arg = '2022 ' + str(semana) + ' 3'
+        mier_arg = '2023 ' + str(semana) + ' 3'
         mier = time.asctime(time.strptime(mier_arg, '%Y %W %w'))
-        jue_arg = '2022 ' + str(semana) + ' 4'
+        jue_arg = '2023 ' + str(semana) + ' 4'
         jue = time.asctime(time.strptime(jue_arg, '%Y %W %w'))
-        vie_arg = '2022 ' + str(semana) + ' 5'
+        vie_arg = '2023 ' + str(semana) + ' 5'
         vie = time.asctime(time.strptime(vie_arg, '%Y %W %w'))
-        sab_arg = '2022 ' + str(semana) + ' 6'
+        sab_arg = '2023 ' + str(semana) + ' 6'
         sab = time.asctime(time.strptime(sab_arg, '%Y %W %w'))
-        dom_arg = '2022 ' + str(semana) + ' 0'
+        dom_arg = '2023 ' + str(semana) + ' 0'
         dom = time.asctime(time.strptime(dom_arg, '%Y %W %w'))
 
         dias_semana=[lun,mar,mier,jue,vie,sab,dom]
@@ -467,7 +467,7 @@ def consulta_pagos():
     weeknumber = datetime.now().date().strftime("%U")
     if request.method == "POST":
         week = request.form["semana"]
-        arg = '2022 ' + str(week) + ' 4'
+        arg = '2023 ' + str(week) + ' 4'
         week_day = time.asctime(time.strptime(arg, '%Y %W %w'))
         project = request.form["id_proyecto"]
 
