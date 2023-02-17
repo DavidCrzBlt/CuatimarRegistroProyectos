@@ -24,6 +24,7 @@ class Proyecto(db.Model):
     ubicacion = db.Column(db.String(200))
     cliente = db.Column(db.String(200))
     trabajo_diario = db.Column(db.Boolean)
+    empleados = db.relationship('Empleado',backref='proyecto')
     salarios = db.relationship('Salario', backref='proyecto')
     asistencias = db.relationship('Asistencia', backref='proyecto')
     pagos = db.relationship('Pago', backref='proyecto')
@@ -34,6 +35,7 @@ class Proyecto(db.Model):
 
 class Empleado(db.Model):
     id_empleado = db.Column('id_empleado', db.Integer, primary_key=True)
+    id_proyecto = db.Column(db.Integer, db.ForeignKey('proyecto.id_proyecto'))
     clave_banco = db.Column(db.Integer, unique=True)
     nombre_empleado = db.Column(db.String(255), unique=True)
     descuento_FONACOT = db.Column(db.Boolean)
@@ -157,7 +159,7 @@ def empleados():
             return render_template('empleados.html', proyectos=proyectos, message=message)
         else:
             # Agregamos un nuevo empleado a la tabla de empleados
-            new_employee = Empleado(clave_banco=clave_banco, nombre_empleado=nombre_empleado,
+            new_employee = Empleado(clave_banco=clave_banco, nombre_empleado=nombre_empleado,id_proyecto =request.form["proyecto"],
                                     descuento_FONACOT=m[0], descuento_INFONAVIT=m[1], status=True)
 
             db.session.add(new_employee)
@@ -185,50 +187,41 @@ def empleados():
 def asistencias():
     today = datetime.now().date()
     yesterday = today-timedelta(days=1)
-    proyectos = Proyecto.query.filter_by(status=True)
 
-    if request.method == "POST":
-        if "id_proyecto" in request.form:
-            p = request.form["id_proyecto"]
-            checar_asistencia = Asistencia.query.filter_by(
-                id_proyecto=p).filter_by(day=today).first()
-            c = Asistencia.query.filter_by(
-                id_proyecto=p).filter_by(day=yesterday).first()
-            checar_proyecto = Proyecto.query.filter_by(id_proyecto=p).first()
+    day = today
+    checar_asistencia = Asistencia.query.filter_by(day=today).first()
 
-            if checar_proyecto.trabajo_diario == True and today.weekday() == 0 and c is None:
-                check_project = True
-            else:
-                check_project = False
+    if checar_asistencia is not None:
+        message = "No puedes checar asistencia dos veces el mismo día"
+        return render_template('asistencias.html', message=message)
+    
+    else:
+        empleados = Empleado.query.filter_by(status=True)
+
+        if today.weekday() == 0:
+            checar_asistencia = Asistencia.query.filter_by(day=yesterday).first()
 
             if checar_asistencia is not None:
-                message = "No puedes checar asistencia dos veces el mismo día"
-                return render_template('asistencias.html', message=message, proyectos=proyectos)
-            elif c is not None:
-                empleados = Salario.query.filter_by(id_proyecto=request.form["id_proyecto"], status=True).all()
-                return render_template('asistencias.html', empleados=empleados, proyectos=proyectos, today=today, yesterday=yesterday, cp=check_project)
+                day = today
             else:
-                empleados = Salario.query.filter_by(id_proyecto=request.form["id_proyecto"], status=True).all()
-                return render_template('asistencias.html', empleados=empleados, proyectos=proyectos, today=today, yesterday=yesterday, cp=check_project)
+                day = yesterday
 
-        if "horas_extras" in request.form:
-            e = request.form.getlist('empleado')
+        if request.method == "POST":
+
             he = request.form.getlist('horas_extras')
             fal = request.form.getlist('attendance')
-            hoy = request.form.getlist('today')
-            request_values = {"e": e, "he": he, "fal": fal, "hoy": hoy}
+
             s = 0
-            for x in e:
-                registro_asistencia = Asistencia(id_empleado=request_values["e"][s], horas_extras=request_values["he"][s], attendance=request_values["fal"][s], day=request_values["hoy"][s], id_proyecto=request.form["proyecto"])
+            for empleado in empleados:
+                registro_asistencia = Asistencia(id_empleado=empleado.id_empleado, horas_extras=he[s], attendance=fal[s], day=day, id_proyecto=empleado.id_proyecto)
                 s = s+1
 
                 db.session.add(registro_asistencia)
                 db.session.commit()
 
-            message = "Se han registrado exitosamente las asistencias"
-            return render_template('asistencias.html', message=message, proyectos=proyectos)
-
-    return render_template('asistencias.html', proyectos=proyectos)
+            message = f'Se han registrado exitosamente las asistencias del día: {day}'
+            return render_template('asistencias.html', message=message)
+        return render_template('asistencias.html',empleados=empleados,day=day)
 
 @app.route('/pagos', methods=["GET", "POST"])
 def pagos():
@@ -313,10 +306,6 @@ def pagos():
                                 contador_asistencias = contador_asistencias
                                 contador_horas_extras = contador_horas_extras
 
-                        # Va a considerar si el proyecto es de lunes a domingo 
-                        pquery = Proyecto.query.filter_by(id_proyecto=project).first()
-                        if pquery.trabajo_diario == False:
-                            contador_asistencias = contador_asistencias + 1
                           
                         lista_pagos["Asistencia"].append(contador_asistencias)
                         lista_pagos["Horas extras"].append(contador_horas_extras)
@@ -514,9 +503,10 @@ def editarEmpleado(variable):
                 else:
                     m.append(False)
 
-        modificacion_empleado = Empleado.query.filter_by(
-            id_empleado=request.form["id_empleado"]).first()
+        modificacion_empleado = Empleado.query.filter_by(id_empleado=request.form["id_empleado"]).first()
+
         modificacion_empleado.nombre_empleado = request.form["nombre_empleado"]
+        modificacion_empleado.id_proyecto = request.form["id_proyecto"]
         modificacion_empleado.descuento_FONACOT = m[0]
         modificacion_empleado.descuento_INFONAVIT = m[1]
         modificacion_empleado.status = True
@@ -541,6 +531,7 @@ def reasignarEmpleado(proyecto, empleado):
 
     emp = Empleado.query.filter_by(id_empleado=empleado).first()
     emp.status = True
+    emp.id_proyecto = proyecto
     db.session.commit()
 
     return redirect(url_for('consulta_empleados'))
